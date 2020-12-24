@@ -10,7 +10,7 @@ import com.example.movies.utils.AppExecutors;
 
 public class MovieRepository implements DataSource {
 
-    private final int PAGE_SIZE = 20;
+    private static final int PAGE_SIZE = 20;
 
     private LiveData<PagedList<Movie>> moviesList;
 

@@ -23,7 +23,8 @@ public class MoviePageKeyedDataSource extends PageKeyedDataSource<Integer, Movie
 
     private static final int FIRST_PAGE = 1;
 
-    MutableLiveData<String> loadDataState = new MutableLiveData<>();
+    MutableLiveData<NetworkState> networkState = new MutableLiveData<>();
+    MutableLiveData<NetworkState> initialLoad = new MutableLiveData<>();
 
     private final MovieApiService movieApiService;
 
@@ -35,7 +36,8 @@ public class MoviePageKeyedDataSource extends PageKeyedDataSource<Integer, Movie
     public void loadInitial(@NonNull LoadInitialParams<Integer> params,
                             @NonNull LoadInitialCallback<Integer, Movie> callback) {
 
-        loadDataState.postValue("LOADING");
+        networkState.postValue(NetworkState.LOADING);
+        initialLoad.postValue(NetworkState.LOADING);
 
         // load data from API
         // but before that check filtering option
@@ -44,9 +46,16 @@ public class MoviePageKeyedDataSource extends PageKeyedDataSource<Integer, Movie
             Response<MoviesResponse> response = request.execute();
             MoviesResponse data = response.body();
             List<Movie> movieList = data != null ? data.getMovies() : Collections.<Movie>emptyList();
+
+            networkState.postValue(NetworkState.LOADED);
+            initialLoad.postValue(NetworkState.LOADED);
+
             callback.onResult(movieList, null, FIRST_PAGE + 1);
         } catch (IOException e) {
             e.printStackTrace();
+            NetworkState error = NetworkState.error(e.getMessage());
+            networkState.postValue(error);
+            initialLoad.postValue(error);
         }
     }
 
