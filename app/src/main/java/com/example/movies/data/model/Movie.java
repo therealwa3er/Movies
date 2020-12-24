@@ -1,4 +1,4 @@
-package com.example.movies.data;
+package com.example.movies.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -14,7 +14,7 @@ public class Movie {
     private String imageUrl;
 
     @SerializedName("overview")
-    private String plot;
+    private String overview;
 
     @SerializedName("popularity")
     private long popularity;
