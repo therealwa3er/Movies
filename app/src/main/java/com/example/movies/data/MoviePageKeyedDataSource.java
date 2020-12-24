@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -65,7 +66,35 @@ public class MoviePageKeyedDataSource extends PageKeyedDataSource<Integer, Movie
     }
 
     @Override
-    public void loadAfter(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Integer, Movie> callback) {
+    public void loadAfter(@NonNull final LoadParams<Integer> params, @NonNull final LoadCallback<Integer, Movie> callback) {
+        networkState.postValue(NetworkState.LOADING);
 
+        // load data from API
+        // but before that check filtering option
+        Call<MoviesResponse> request = movieApiService.getPopularMovies(params.key);
+
+        request.enqueue(new Callback<MoviesResponse>() {
+            @Override
+            public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+                if (response.isSuccessful()) {
+                    MoviesResponse data = response.body();
+                    List<Movie> movieList =
+                            data != null ? data.getMovies() : Collections.<Movie>emptyList();
+
+                    callback.onResult(movieList, params.key + 1);
+                    networkState.postValue(NetworkState.LOADED);
+                } else {
+
+                    networkState.postValue(
+                            NetworkState.error("error code: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MoviesResponse> call, Throwable t) {
+                networkState.postValue(
+                        NetworkState.error(t != null ? t.getMessage() : "unknown error"));
+            }
+        });
     }
 }
