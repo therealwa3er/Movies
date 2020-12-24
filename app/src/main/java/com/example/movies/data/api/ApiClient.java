@@ -11,7 +11,7 @@ public class ApiClient {
 
     private static final OkHttpClient client;
 
-    private static MovieApiService INSTANCE;
+    private static MovieApiService sInstance;
 
     private static final Object sLock = new Object();
 
@@ -27,10 +27,10 @@ public class ApiClient {
 
     public static MovieApiService getInstance() {
         synchronized (sLock) {
-            if (INSTANCE == null) {
-                INSTANCE = getRetrofitInstance().create(MovieApiService.class);
+            if (sInstance == null) {
+                sInstance = getRetrofitInstance().create(MovieApiService.class);
             }
-            return INSTANCE;
+            return sInstance;
         }
     }
 
