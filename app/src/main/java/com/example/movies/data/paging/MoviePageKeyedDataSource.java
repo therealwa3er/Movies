@@ -1,4 +1,4 @@
-package com.example.movies.data;
+package com.example.movies.data.paging;
 
 
 import androidx.annotation.NonNull;
@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
 
 import com.example.movies.data.api.MovieApiService;
+import com.example.movies.data.api.NetworkState;
 import com.example.movies.data.model.Movie;
 import com.example.movies.data.model.MoviesResponse;
 

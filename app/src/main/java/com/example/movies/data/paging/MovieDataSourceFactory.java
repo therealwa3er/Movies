@@ -1,4 +1,4 @@
-package com.example.movies.data;
+package com.example.movies.data.paging;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;

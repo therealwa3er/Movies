@@ -6,6 +6,7 @@ import androidx.paging.PagedList;
 
 import com.example.movies.data.api.MovieApiService;
 import com.example.movies.data.model.Movie;
+import com.example.movies.data.paging.MovieDataSourceFactory;
 import com.example.movies.utils.AppExecutors;
 
 public class MovieRepository implements DataSource {

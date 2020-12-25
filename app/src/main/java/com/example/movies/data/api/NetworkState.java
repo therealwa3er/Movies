@@ -1,4 +1,4 @@
-package com.example.movies.data;
+package com.example.movies.data.api;
 
 public class NetworkState {
 
@@ -10,12 +10,15 @@ public class NetworkState {
         this.msg = msg;
     }
 
-    static NetworkState LOADED = new NetworkState(Status.SUCCESS, null);
-    static NetworkState LOADING = new NetworkState(Status.RUNNING, null);
+    public static NetworkState LOADED = new NetworkState(Status.SUCCESS, null);
+    public static NetworkState LOADING = new NetworkState(Status.RUNNING, null);
     public static NetworkState error(String msg) {
         return new NetworkState(Status.FAILED, msg);
     }
+
 }
+
+
 
 enum Status {
     RUNNING,
