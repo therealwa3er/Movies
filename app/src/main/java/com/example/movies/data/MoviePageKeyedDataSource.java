@@ -24,8 +24,8 @@ public class MoviePageKeyedDataSource extends PageKeyedDataSource<Integer, Movie
 
     private static final int FIRST_PAGE = 1;
 
-    MutableLiveData<NetworkState> networkState = new MutableLiveData<>();
-    MutableLiveData<NetworkState> initialLoad = new MutableLiveData<>();
+    public MutableLiveData<NetworkState> networkState = new MutableLiveData<>();
+    public MutableLiveData<NetworkState> initialLoad = new MutableLiveData<>();
 
     private final MovieApiService movieApiService;
 
