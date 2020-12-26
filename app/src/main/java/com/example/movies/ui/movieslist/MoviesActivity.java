@@ -35,6 +35,11 @@ public class MoviesActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        if (viewModel.getCurrentSorting() == MoviesFilterType.POPULAR) {
+            menu.findItem(R.id.action_popular_movies).setChecked(true);
+        } else {
+            menu.findItem(R.id.action_top_rated).setChecked(true);
+        }
         return true;
     }
 
