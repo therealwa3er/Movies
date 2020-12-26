@@ -13,6 +13,7 @@ import com.example.movies.data.model.Movie;
 import com.example.movies.data.model.RepoMoviesResult;
 import com.example.movies.data.paging.MovieDataSourceFactory;
 import com.example.movies.data.paging.MoviePageKeyedDataSource;
+import com.example.movies.ui.movieslist.MoviesFilterType;
 import com.example.movies.utils.AppExecutors;
 
 public class MovieRepository implements DataSource {
@@ -30,14 +31,13 @@ public class MovieRepository implements DataSource {
     }
 
     @Override
-    public RepoMoviesResult getPopularMovies() {
-
-        MovieDataSourceFactory sourceFactory = new MovieDataSourceFactory(mMovieApiService);
+    public RepoMoviesResult getFilteredMoviesBy(MoviesFilterType sortBy) {
+        MovieDataSourceFactory sourceFactory = new MovieDataSourceFactory(mMovieApiService, sortBy);
 
         // paging configuration
         PagedList.Config config = new PagedList.Config.Builder()
                 .setEnablePlaceholders(false)
-                .setPageSize(20)
+                .setPageSize(PAGE_SIZE)
                 .build();
 
         // Get the paged list

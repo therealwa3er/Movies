@@ -1,6 +1,8 @@
 package com.example.movies.ui.movieslist;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -30,6 +32,21 @@ public class MoviesActivity extends AppCompatActivity {
         setupListAdapter();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getGroupId() == R.id.menu_sort_group){
+            viewModel.setSortMoviesBy(item.getItemId());
+            item.setChecked(true);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private MoviesViewModel obtainViewModel() {
         ViewModelFactory factory = ViewModelFactory.getInstance(Injection.provideMovieRepository());
         return ViewModelProviders.of(this, factory).get(MoviesViewModel.class);
@@ -37,10 +54,24 @@ public class MoviesActivity extends AppCompatActivity {
 
     private void setupListAdapter() {
         RecyclerView recyclerView = findViewById(R.id.rv_movie_list);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         GlideRequests glideRequests = GlideApp.with(this);
         final MoviesAdapter moviesAdapter = new MoviesAdapter(glideRequests, viewModel);
         recyclerView.setAdapter(moviesAdapter);
+
+        final GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        // draw network status and errors to fit the whole row(3 spans)
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                switch (moviesAdapter.getItemViewType(position)) {
+                    case R.layout.item_network_state:
+                        return layoutManager.getSpanCount();
+                    default:
+                        return 1;
+                }
+            }
+        });
+        recyclerView.setLayoutManager(layoutManager);
 
         // observe paged list
         viewModel.getPagedList().observe(this, new Observer<PagedList<Movie>>() {
