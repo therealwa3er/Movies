@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.movies.R;
 import com.example.movies.data.model.Movie;
 
-public class MovieListActivity extends AppCompatActivity {
+public class MoviesActivity extends AppCompatActivity {
 
     MoviesViewModel viewModel;
 
@@ -32,11 +32,15 @@ public class MovieListActivity extends AppCompatActivity {
     private void setupListAdapter() {
         RecyclerView recyclerView = findViewById(R.id.rv_movie_list);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        GlideRequests glideRequests = GlideApp.with(this);
+        final MoviesAdapter moviesAdapter = new MoviesAdapter(glideRequests);
+        recyclerView.setAdapter(moviesAdapter);
 
         // observe paged list
         viewModel.getPagedList().observe(this, new Observer<PagedList<Movie>>() {
             @Override
             public void onChanged(PagedList<Movie> movies) {
+                moviesAdapter.submitList(movies);
             }
         });
     }

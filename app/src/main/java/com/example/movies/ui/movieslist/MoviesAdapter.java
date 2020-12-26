@@ -12,7 +12,7 @@ import com.example.movies.data.model.Movie;
 
 public class MoviesAdapter extends PagedListAdapter<Movie, MoviesAdapter.MovieViewHolder> {
 
-    public MoviesAdapter() {
+    public MoviesAdapter(GlideRequests glide) {
         super(new DiffUtil.ItemCallback<Movie>() {
             @Override
             public boolean areItemsTheSame(@NonNull Movie oldItem, @NonNull Movie newItem) {
