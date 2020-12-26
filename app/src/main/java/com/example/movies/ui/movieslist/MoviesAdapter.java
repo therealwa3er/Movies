@@ -1,6 +1,6 @@
 package com.example.movies.ui.movieslist;
 
-import android.view.View;
+
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -9,38 +9,43 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movies.data.model.Movie;
+import com.example.movies.utils.GlideRequests;
 
-public class MoviesAdapter extends PagedListAdapter<Movie, MoviesAdapter.MovieViewHolder> {
+public class MoviesAdapter extends PagedListAdapter<Movie, RecyclerView.ViewHolder> {
+
+    public static final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
+    public static final String IMAGE_SIZE = "w185";
+    public static final String IMAGE_URL = IMAGE_BASE_URL + IMAGE_SIZE;
+
+    private GlideRequests glide;
 
     public MoviesAdapter(GlideRequests glide) {
-        super(new DiffUtil.ItemCallback<Movie>() {
-            @Override
-            public boolean areItemsTheSame(@NonNull Movie oldItem, @NonNull Movie newItem) {
-                return false;
-            }
+        super(MOVIE_COMPARATOR);
 
-            @Override
-            public boolean areContentsTheSame(@NonNull Movie oldItem, @NonNull Movie newItem) {
-                return false;
-            }
-        });
+        this.glide = glide;
     }
 
     @NonNull
     @Override
-    public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return MovieViewHolder.create(parent, glide);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
-
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        Movie movie = getItem(position);
+        ((MovieViewHolder) holder).bindTo(movie);
     }
 
-    public class MovieViewHolder extends RecyclerView.ViewHolder {
-
-        public MovieViewHolder(@NonNull View itemView) {
-            super(itemView);
+    private static DiffUtil.ItemCallback<Movie> MOVIE_COMPARATOR = new DiffUtil.ItemCallback<Movie>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Movie oldItem, @NonNull Movie newItem) {
+            return oldItem.getId() == newItem.getId();
         }
-    }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Movie oldItem, @NonNull Movie newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
 }

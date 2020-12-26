@@ -11,6 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movies.R;
 import com.example.movies.data.model.Movie;
+import com.example.movies.utils.GlideApp;
+import com.example.movies.utils.GlideRequests;
+import com.example.movies.utils.Injection;
+import com.example.movies.utils.ViewModelFactory;
 
 public class MoviesActivity extends AppCompatActivity {
 
@@ -26,7 +30,8 @@ public class MoviesActivity extends AppCompatActivity {
     }
 
     private MoviesViewModel obtainViewModel() {
-        return ViewModelProviders.of(this).get(MoviesViewModel.class);
+        ViewModelFactory factory = ViewModelFactory.getInstance(Injection.provideMovieRepository());
+        return ViewModelProviders.of(this, factory).get(MoviesViewModel.class);
     }
 
     private void setupListAdapter() {
