@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.movies.data.MovieRepository;
+import com.example.movies.ui.moviedetails.MovieDetailsViewModel;
 import com.example.movies.ui.movieslist.MoviesViewModel;
 
 public class ViewModelFactory implements ViewModelProvider.Factory {
@@ -25,6 +26,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         if (modelClass.isAssignableFrom(MoviesViewModel.class)) {
             //noinspection unchecked
             return (T) new MoviesViewModel(repository);
+        } else if (modelClass.isAssignableFrom(MovieDetailsViewModel.class)) {
+            //noinspection unchecked
+            return (T) new MovieDetailsViewModel(repository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
     }

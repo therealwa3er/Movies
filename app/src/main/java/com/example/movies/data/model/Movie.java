@@ -7,13 +7,16 @@ import java.util.Objects;
 public class Movie {
 
     @SerializedName("id")
-    private int id;
+    private long  id;
 
     @SerializedName("title")
     private String title;
 
     @SerializedName("poster_path")
     private String imageUrl;
+
+    @SerializedName("backdrop_path")
+    private String backdrop;
 
     @SerializedName("overview")
     private String overview;
@@ -27,11 +30,11 @@ public class Movie {
     @SerializedName("release_date")
     private String releaseDate;
 
-    public int getId() {
+    public long  getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long  id) {
         this.id = id;
     }
 
@@ -50,6 +53,10 @@ public class Movie {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public String getBackdrop() { return backdrop; }
+
+    public void setBackdrop(String backdrop) { this.backdrop = backdrop; }
 
     public String getOverview() {
         return overview;

@@ -3,6 +3,7 @@ package com.example.movies.data;
 
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
@@ -16,6 +17,10 @@ import com.example.movies.data.paging.MoviePageKeyedDataSource;
 import com.example.movies.ui.movieslist.MoviesFilterType;
 import com.example.movies.utils.AppExecutors;
 
+import java.io.IOException;
+
+import retrofit2.Response;
+
 public class MovieRepository implements DataSource {
 
     private static final int PAGE_SIZE = 20;
@@ -28,6 +33,23 @@ public class MovieRepository implements DataSource {
                            AppExecutors executors) {
         mMovieApiService = movieApiService;
         mExecutors = executors;
+    }
+
+    @Override
+    public MutableLiveData<Movie> getMovie(final long movieId) {
+        final MutableLiveData<Movie> movieLiveData = new MutableLiveData<>();
+        mExecutors.networkIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response<Movie> response = mMovieApiService.getMovieDetails(movieId).execute();
+                    movieLiveData.postValue(response.body());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        return movieLiveData;
     }
 
     @Override
