@@ -5,20 +5,31 @@ import androidx.lifecycle.ViewModel;
 import androidx.paging.PagedList;
 
 import com.example.movies.data.MovieRepository;
+import com.example.movies.data.api.NetworkState;
 import com.example.movies.data.model.Movie;
+import com.example.movies.data.model.RepoMoviesResult;
 
 public class MoviesViewModel extends ViewModel {
 
     private final MovieRepository movieRepository;
 
-    private LiveData<PagedList<Movie>> pagedList;
+    private RepoMoviesResult repoMoviesResult;
 
     public MoviesViewModel(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
-        pagedList = movieRepository.getPopularMovies();
+        repoMoviesResult = movieRepository.getPopularMovies();
     }
 
-    public LiveData<PagedList<Movie>> getPagedList() {
-        return pagedList;
+    LiveData<PagedList<Movie>> getPagedList() {
+        return repoMoviesResult.data;
+    }
+
+    LiveData<NetworkState> getNetWorkState() {
+        return repoMoviesResult.networkState;
+    }
+
+    // retries any failed requests.
+    void retry() {
+        repoMoviesResult.sourceLiveData.getValue().retryCallback.invoke();
     }
 }

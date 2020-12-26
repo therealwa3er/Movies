@@ -1,19 +1,23 @@
 package com.example.movies.data;
 
+
+import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
 import com.example.movies.data.api.MovieApiService;
+import com.example.movies.data.api.NetworkState;
 import com.example.movies.data.model.Movie;
+import com.example.movies.data.model.RepoMoviesResult;
 import com.example.movies.data.paging.MovieDataSourceFactory;
+import com.example.movies.data.paging.MoviePageKeyedDataSource;
 import com.example.movies.utils.AppExecutors;
 
 public class MovieRepository implements DataSource {
 
     private static final int PAGE_SIZE = 20;
-
-    private LiveData<PagedList<Movie>> moviesList;
 
     private final MovieApiService mMovieApiService;
 
@@ -26,7 +30,7 @@ public class MovieRepository implements DataSource {
     }
 
     @Override
-    public LiveData<PagedList<Movie>> getPopularMovies() {
+    public RepoMoviesResult getPopularMovies() {
 
         MovieDataSourceFactory sourceFactory = new MovieDataSourceFactory(mMovieApiService);
 
@@ -36,10 +40,23 @@ public class MovieRepository implements DataSource {
                 .setPageSize(20)
                 .build();
 
-        moviesList = new LivePagedListBuilder<>(sourceFactory, config)
+        // Get the paged list
+        LiveData<PagedList<Movie>> moviesPagedList = new LivePagedListBuilder<>(sourceFactory, config)
                 .setFetchExecutor(mExecutors.networkIO())
                 .build();
 
-        return moviesList;
+        LiveData<NetworkState> networkState = Transformations.switchMap(sourceFactory.sourceLiveData,
+                new Function<MoviePageKeyedDataSource, LiveData<NetworkState>>() {
+                    @Override
+                    public LiveData<NetworkState> apply(MoviePageKeyedDataSource input) {
+                        return input.networkState;
+                    }
+                });
+
+        return new RepoMoviesResult(
+                moviesPagedList,
+                networkState,
+                sourceFactory.sourceLiveData
+        );
     }
 }

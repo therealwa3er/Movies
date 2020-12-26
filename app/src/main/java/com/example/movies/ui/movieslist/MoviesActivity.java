@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movies.R;
+import com.example.movies.data.api.NetworkState;
 import com.example.movies.data.model.Movie;
 import com.example.movies.utils.GlideApp;
 import com.example.movies.utils.GlideRequests;
@@ -38,7 +39,7 @@ public class MoviesActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.rv_movie_list);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         GlideRequests glideRequests = GlideApp.with(this);
-        final MoviesAdapter moviesAdapter = new MoviesAdapter(glideRequests);
+        final MoviesAdapter moviesAdapter = new MoviesAdapter(glideRequests, viewModel);
         recyclerView.setAdapter(moviesAdapter);
 
         // observe paged list
@@ -46,6 +47,14 @@ public class MoviesActivity extends AppCompatActivity {
             @Override
             public void onChanged(PagedList<Movie> movies) {
                 moviesAdapter.submitList(movies);
+            }
+        });
+
+        // observe network state
+        viewModel.getNetWorkState().observe(this, new Observer<NetworkState>() {
+            @Override
+            public void onChanged(NetworkState networkState) {
+                moviesAdapter.setNetworkState(networkState);
             }
         });
     }
