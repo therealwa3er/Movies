@@ -4,7 +4,13 @@
 Movies est crée dans le cadre du module Android en E-Services, c'est  répertorie les films classés par popularité et par taux. Vous pouvez vérifier les détails du film en cliquant sur chaque affiche. L'application récupère les données du film à l'aide de l'API de themoviedb.
 </h4>
 
-## libraries
+## Screenshots
+
+![portrait.PNG](screenshots/portrait.PNG)
+![details.PNG](screenshots/details.PNG)
+![orderby.PNG](screenshots/orderby.PNG)
+
+## Libraries
 AndroidX
 
 Retrofit 2: Pour les appels au webservices REST ( API themoviedb dans notre cas )
@@ -20,3 +26,6 @@ Paging: pour charger les données plus facilement et progressivement dans le Rec
 Glide: pour charger les images depuis URL to imageView
 
 Databinding: Minimiser le code nécessaire pour la logique pour se connecter aux éléments de l’UI.   
+
+Okhttp
+
