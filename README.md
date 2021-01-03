@@ -1,7 +1,7 @@
 # Movies    
 
 <h4 align="center">
-Movies est crée dans le cadre du module Android en E-Services, c'est  répertorie les films classés par popularité et par taux. Vous pouvez vérifier les détails du film en cliquant sur chaque affiche. L'application récupère les données du film à l'aide de l'API de themoviedb.
+Movies est crée dans le cadre du module Android en E-Services, ça répertorie les films classés par popularité et les mieux notés. Vous pouvez vérifier les détails du film en cliquant sur chaque affiche. L'application récupère les données du film à l'aide de l'API de themoviedb.
 </h4>
 
 ## Screenshots
